@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# โหลดข้อมูลอัตราเงินเฟ้อจากไฟล์ CSV
+file_path = '/mnt/data/global_inflation_data.csv'
+inflation_data = pd.read_csv(file_path)
+
+# กำหนดรายชื่อประเทศในกลุ่ม G7 และประเทศไทย
+g7_countries = ['Canada', 'France', 'Germany', 'Italy', 'Japan', 'United Kingdom', 'United States', 'Thailand']
+
+# กรองข้อมูลเพื่อรวมเฉพาะประเทศที่สนใจ
+g7_inflation_data = inflation_data[inflation_data['country_name'].isin(g7_countries)]
+
+# กำหนดช่วงปีสำหรับแกน X
+years = [str(year) for year in range(2015, 2025)]
+
+# สร้างกราฟเส้นแสดงอัตราเงินเฟ้อสำหรับแต่ละประเทศ
+plt.figure(figsize=(12, 8))
+for country in g7_countries:
+    country_data = g7_inflation_data[g7_inflation_data['country_name'] == country]
+    plt.plot(years, country_data.iloc[0, -10:].values, marker='o', label=country)
+
+# ปรับแต่งกราฟ
+plt.title('Inflation Rates of G7 Countries and Thailand (2015-2024)', fontsize=16)
+plt.xlabel('Year', fontsize=12)
+plt.ylabel('Inflation Rate (%)', fontsize=12)
+plt.grid(True)
+plt.legend(title='Country', loc='upper left')
+
+# แสดงกราฟ
+plt.tight_layout()
+plt.show()
